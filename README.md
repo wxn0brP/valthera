@@ -7,7 +7,7 @@
 Run the following command:  
 
 ```sh
-curl -L https://github.com/wxn0brP/valthera/raw/main/valthera -o /usr/local/bin/valthera && chmod +x /usr/local/bin/valthera
+yarn global add github:wxn0brP/valthera
 ```
 
 This downloads the `valthera` script and makes it executable.  
