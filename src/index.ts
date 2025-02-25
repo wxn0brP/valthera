@@ -74,7 +74,7 @@ if (scriptArgs.length > 0 && scriptArgs[0] === "-h") {
 }
 
 if (scriptArgs.length > 0 && scriptArgs[0] === "-v") {
-    console.log("Valthera version: 0.0.1");
+    console.log("Valthera version: 0.0.2");
     process.exit(0);
 }
 
@@ -117,16 +117,10 @@ if (!config.cmd) {
     process.exit(1);
 }
 
-// Merge cmd args with additional args
-const cmdIsRaw = config.cmd?.includes(" ");
-const processArgs = []
-if (cmdIsRaw) {
-    const customCmdArgs = config.cmd.split(" ");
-    config.cmd = customCmdArgs.shift()!;
-    processArgs.push(...customCmdArgs)
-}
-processArgs.push(...(config.args ?? []));
-processArgs.push(...cmdArgs);
+const processedCmd =
+    config.cmd +
+    (config.args?.length > 0 ? " " + config.args.join(" ") : "") +
+    (cmdArgs.length > 0 ? " " + cmdArgs.join(" ") : "");
 
 // Function to start the process
 let proc: ReturnType<typeof spawn> | null = null;
@@ -135,11 +129,12 @@ const startProcess = () => {
     if (config.restart_cmd) exec(config.restart_cmd, (err, stdout) => stdout && log(COLORS.yellow, stdout.trim()));
 
     log(COLORS.yellow, "Restarting...");
-    log(COLORS.yellow, `Running command: ${config.cmd} ${processArgs.join(" ")}`);
+    log(COLORS.yellow, `Running command: ${processedCmd}`);
 
     // If command contains spaces, use shell execution
-    proc = spawn(config.cmd, processArgs, {
+    proc = spawn(processedCmd, {
         stdio: "inherit",
+        shell: true,
     });
 
     proc.on("exit", (code) => {

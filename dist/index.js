@@ -46,7 +46,7 @@ if (scriptArgs.length > 0 && scriptArgs[0] === "-h") {
     process.exit(0);
 }
 if (scriptArgs.length > 0 && scriptArgs[0] === "-v") {
-    console.log("Valthera version: 0.0.1");
+    console.log("Valthera version: 0.0.2");
     process.exit(0);
 }
 if (scriptArgs.length > 0 && scriptArgs[0] === "-p") {
@@ -80,15 +80,9 @@ if (!config.cmd) {
     log(COLORS.red, "No `cmd` found in config or `package.json`. Exiting.");
     process.exit(1);
 }
-const cmdIsRaw = config.cmd?.includes(" ");
-const processArgs = [];
-if (cmdIsRaw) {
-    const customCmdArgs = config.cmd.split(" ");
-    config.cmd = customCmdArgs.shift();
-    processArgs.push(...customCmdArgs);
-}
-processArgs.push(...(config.args ?? []));
-processArgs.push(...cmdArgs);
+const processedCmd = config.cmd +
+    (config.args?.length > 0 ? " " + config.args.join(" ") : "") +
+    (cmdArgs.length > 0 ? " " + cmdArgs.join(" ") : "");
 let proc = null;
 const startProcess = () => {
     if (proc)
@@ -96,9 +90,10 @@ const startProcess = () => {
     if (config.restart_cmd)
         exec(config.restart_cmd, (err, stdout) => stdout && log(COLORS.yellow, stdout.trim()));
     log(COLORS.yellow, "Restarting...");
-    log(COLORS.yellow, `Running command: ${config.cmd} ${processArgs.join(" ")}`);
-    proc = spawn(config.cmd, processArgs, {
+    log(COLORS.yellow, `Running command: ${processedCmd}`);
+    proc = spawn(processedCmd, {
         stdio: "inherit",
+        shell: true,
     });
     proc.on("exit", (code) => {
         if (code === 0 || code === null) {
