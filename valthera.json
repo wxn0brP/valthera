@@ -1,0 +1,4 @@
+{
+    "cmd": "yarn build",
+    "watch": ["src"]
+}
