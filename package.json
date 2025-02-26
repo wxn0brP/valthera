@@ -1,6 +1,6 @@
 {
 	"name": "valthera",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"main": "dist/index.js",
 	"author": "wxn0brP",
 	"license": "MIT",
@@ -9,7 +9,7 @@
 		"valthera": "./dist/index.js"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc && tsc-alias",
 		"start": "node dist/index.js"
 	},
 	"devDependencies": {
@@ -19,5 +19,9 @@
 	},
 	"dependencies": {
 		"chokidar": "^4.0.3"
-	}
+	},
+	"files": [
+		"dist/**/*",
+		"package.json"
+	]
 }
