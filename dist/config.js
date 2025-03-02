@@ -12,17 +12,7 @@ export let config = {
     restart_cmd: "",
     events: {},
 };
-export const preConfigs = {
-    ts: {
-        cmd: "yarn build",
-        args: [],
-        watch: ["src"],
-        restart_cmd: "clear",
-        events: {
-            clean: "rm -rf dist",
-        }
-    }
-};
+export const preConfigsList = fs.readdirSync(import.meta.dirname + "/../config").map((file) => file.replace(".json", ""));
 const rawArgs = process.argv.slice(isDirectExec ? 2 : 1);
 const doubleDashIndex = rawArgs.indexOf("--");
 const scriptArgs = doubleDashIndex !== -1 ? rawArgs.slice(0, doubleDashIndex) : rawArgs;
@@ -47,14 +37,15 @@ if (ifFlag("v")) {
 if (ifFlag("p")) {
     if (scriptArgs.length < 2) {
         log(COLORS.green, "Available predefined configurations:");
-        Object.keys(preConfigs).forEach((key) => {
+        preConfigsList.forEach((key) => {
             log(COLORS.yellow, "", `${key}`);
         });
         process.exit(0);
     }
-    const preConfig = scriptArgs[1];
-    if (preConfigs[preConfig]) {
-        config = deepMerge(config, preConfigs[preConfig]);
+    const preConfigName = scriptArgs[1];
+    if (preConfigsList.includes(preConfigName)) {
+        const preConfigData = JSON.parse(fs.readFileSync(import.meta.dirname + `/../config/${preConfigName}.json`, "utf8"));
+        config = deepMerge(config, preConfigData);
     }
 }
 if (ifFlag("c")) {
