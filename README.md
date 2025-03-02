@@ -29,14 +29,16 @@ Use a predefined configuration:
 valthera -p ts
 ```
 
-Show available options:  
+Set a configuration value:  
 ```sh
-valthera -h
+valthera --cmd="node server.js" --watch="src"
 ```
+
+See `valthera --help` for more options.
 
 ## Configuration  
 
-Create a `valthera.json` file in your project directory:  
+Create a `valthera.json` file in your project directory eg:  
 ```json
 {
   "cmd": "npm start",
@@ -48,12 +50,20 @@ Create a `valthera.json` file in your project directory:
   }
 }
 ```
+or run
+```sh
+valthera -mc
+```
 
 ## Interactive Commands  
 
 While `valthera` is running, you can type:  
-- `rs` – manual restart  
-- `quit` – exit the program  
-- `help` – list available commands  
-- `config` – show current configuration  
-- `<command>` – execute a custom command from `events`
+| Command | Description |
+| --- | --- |
+| `rs` | manual restart |
+| `quit` | exit the program |
+| `help` | list available commands |
+| `config` | show current configuration |
+| `cls` | clear the console |
+| `$<command>` | execute a custom command (eg `$yarn add`) |
+| `<command>` | execute a custom command from `events` |
