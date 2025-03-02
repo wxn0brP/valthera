@@ -46,11 +46,12 @@ function ifFlag(flag: string) {
 if (ifFlag("h")) {
     log(COLORS.green, "Usage: valthera [options] [command] [args...]");
     log(COLORS.yellow, "Options:");
-    log(COLORS.yellow, "  -h          Show this help message");
-    log(COLORS.yellow, "  -v          Show version number");
-    log(COLORS.yellow, "  -p <name>   Use predefined configuration");
-    log(COLORS.yellow, "  -c <cmd>    Use custom command");
-    log(COLORS.yellow, "  -mc [name]  Make configuration (name for predefined configs)");
+    log(COLORS.yellow, "  -h            \t Show this help message");
+    log(COLORS.yellow, "  -v            \t Show version number");
+    log(COLORS.yellow, "  -p <name>     \t Use predefined configuration");
+    log(COLORS.yellow, "  -c <cmd>      \t Use custom command");
+    log(COLORS.yellow, "  -mc [name]    \t Make configuration (name for predefined configs)");
+    log(COLORS.yellow, "  --any=value   \t Set any configuration value");
     process.exit(0);
 }
 
@@ -102,6 +103,14 @@ if (ifFlag("c")) {
 // Load `valthera.json` if exists
 if (fs.existsSync(configPath)) {
     config = deepMerge(config, JSON.parse(fs.readFileSync(configPath, "utf8")));
+}
+
+for(const arg of scriptArgs) {
+    if (arg.startsWith("--")) {
+        let [key, value] = arg.slice(2).split("=");
+        if (value.startsWith("{") && value.endsWith("}")) value = JSON.parse(value);
+        config[key] = value;
+    }
 }
 
 // If no custom command, check `package.json`
