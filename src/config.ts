@@ -50,6 +50,7 @@ if (ifFlag("h")) {
     log(COLORS.yellow, "  -v          Show version number");
     log(COLORS.yellow, "  -p <name>   Use predefined configuration");
     log(COLORS.yellow, "  -c <cmd>    Use custom command");
+    log(COLORS.yellow, "  -mc [name]  Make configuration (name for predefined configs)");
     process.exit(0);
 }
 
@@ -60,7 +61,7 @@ if (ifFlag("v")) {
 }
 
 if (ifFlag("p")) {
-    if(scriptArgs.length < 2) {
+    if (scriptArgs.length < 2) {
         log(COLORS.green, "Available predefined configurations:");
         preConfigsList.forEach((key) => {
             log(COLORS.yellow, "", `${key}`);
@@ -72,6 +73,25 @@ if (ifFlag("p")) {
         const preConfigData = JSON.parse(fs.readFileSync(import.meta.dirname + `/../config/${preConfigName}.json`, "utf8"));
         config = deepMerge(config, preConfigData);
     }
+}
+
+if (ifFlag("mc")) {
+    if (fs.existsSync(configPath)) {
+        log(COLORS.red, "Configuration already exists.");
+        process.exit(1);
+    }
+    if (scriptArgs.length >= 2) {
+        const preConfigName = scriptArgs[1];
+        if (preConfigsList.includes(preConfigName)) {
+            const preConfigData = JSON.parse(fs.readFileSync(import.meta.dirname + `/../config/${preConfigName}.json`, "utf8"));
+            fs.writeFileSync(configPath, JSON.stringify(preConfigData, null, 4));
+            log(COLORS.green, "Configuration made based on `" + preConfigName + "`.");
+            process.exit(0);
+        }
+    }
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
+    log(COLORS.green, "Configuration made.");
+    process.exit(0);
 }
 
 if (ifFlag("c")) {
