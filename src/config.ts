@@ -43,15 +43,15 @@ function ifFlag(flag: string) {
     return scriptArgs.length > 0 && scriptArgs[0] === "-" + flag;
 }
 
-if (ifFlag("h")) {
+if (ifFlag("h") || (scriptArgs.length >= 1 && scriptArgs[0] === "--help")) {
     log(COLORS.green, "Usage: valthera [options] [command] [args...]");
     log(COLORS.yellow, "Options:");
-    log(COLORS.yellow, "  -h            \t Show this help message");
-    log(COLORS.yellow, "  -v            \t Show version number");
-    log(COLORS.yellow, "  -p <name>     \t Use predefined configuration");
-    log(COLORS.yellow, "  -c <cmd>      \t Use custom command");
-    log(COLORS.yellow, "  -mc [name]    \t Make configuration (name for predefined configs)");
-    log(COLORS.yellow, "  --any=value   \t Set any configuration value");
+    log(COLORS.yellow, "", "  -h            \t Show this help message");
+    log(COLORS.yellow, "", "  -v            \t Show version number");
+    log(COLORS.yellow, "", "  -p <name>     \t Use predefined configuration");
+    log(COLORS.yellow, "", "  -c <cmd>      \t Use custom command");
+    log(COLORS.yellow, "", "  -mc [name]    \t Make configuration (name for predefined configs)");
+    log(COLORS.yellow, "", "  --any=value   \t Set any configuration value");
     process.exit(0);
 }
 
