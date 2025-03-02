@@ -108,7 +108,10 @@ if (fs.existsSync(configPath)) {
 for(const arg of scriptArgs) {
     if (arg.startsWith("--")) {
         let [key, value] = arg.slice(2).split("=");
-        if (value.startsWith("{") && value.endsWith("}")) value = JSON.parse(value);
+        if (
+            (value.startsWith("{") && value.endsWith("}")) ||
+            (value.startsWith("[") && value.endsWith("]"))
+        ) value = JSON.parse(value);
         config[key] = value;
     }
 }
