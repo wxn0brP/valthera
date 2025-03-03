@@ -7,7 +7,7 @@
 Run the following command:  
 
 ```sh
-yarn global add github:wxn0brP/valthera
+yarn global add github:wxn0brP/valthera#dist
 ```
 
 This downloads the `valthera` script and makes it executable.  

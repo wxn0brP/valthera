@@ -1,0 +1,51 @@
+name: Build and Deploy to Dist Branch
+
+on:
+  push:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install -g typescript tsc-alias
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Push src and dist to Dist Branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git checkout --orphan dist
+          
+          mkdir data
+          cp -R ./dist/ data/
+          cp ./package.json data/package.json
+
+          shopt -s extglob
+          rm -rf !(data)
+          rm .gitignore
+          rm -r .github
+          mv data/* ./
+          rm -rf data
+          ls -al
+
+          git add .
+          git commit -m "Build and Deploy to Dist Branch"
+          git push origin dist --force
