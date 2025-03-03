@@ -36,6 +36,7 @@ jobs:
           
           mkdir data
           cp -R ./dist/ data/
+          cp -R ./config/ data/
           cp ./package.json data/package.json
 
           shopt -s extglob
