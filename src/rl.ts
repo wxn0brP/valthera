@@ -2,7 +2,7 @@ import { exec, spawn } from "child_process";
 import { config } from "./config";
 import { COLORS, log } from "./logger";
 import Readline from "readline";
-import { proc, startProcess } from "./process";
+import { proc, startProcess, stopProcess } from "./process";
 
 // Handle terminal input events
 const rl = Readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -55,10 +55,13 @@ rl.on("line", (input) => {
     }
 });
 
-// Ensure Ctrl+C exits immediately
-rl.on("SIGINT", () => {
+function exitEvent() {
     log(COLORS.green, "Process interrupted. Exiting...");
     rl.close();
-    if (proc) proc.kill(); // Kill the running process
+    stopProcess();
     process.exit(0);
-});
+}
+
+// Ensure Ctrl+C exits immediately
+rl.on("SIGINT", exitEvent);
+rl.on("SIGTERM", exitEvent);

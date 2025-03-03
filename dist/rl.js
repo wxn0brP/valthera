@@ -2,7 +2,7 @@ import { exec, spawn } from "child_process";
 import { config } from "./config.js";
 import { COLORS, log } from "./logger.js";
 import Readline from "readline";
-import { proc, startProcess } from "./process.js";
+import { startProcess, stopProcess } from "./process.js";
 const rl = Readline.createInterface({ input: process.stdin, output: process.stdout });
 rl.on("line", (input) => {
     const trim = input.trim();
@@ -51,10 +51,11 @@ rl.on("line", (input) => {
             break;
     }
 });
-rl.on("SIGINT", () => {
+function exitEvent() {
     log(COLORS.green, "Process interrupted. Exiting...");
     rl.close();
-    if (proc)
-        proc.kill();
+    stopProcess();
     process.exit(0);
-});
+}
+rl.on("SIGINT", exitEvent);
+rl.on("SIGTERM", exitEvent);
