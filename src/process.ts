@@ -35,6 +35,7 @@ export function startProcess() {
         } else {
             log(COLORS.red, `Process crashed with exit code ${code}.`);
         }
+        proc = null;
     });
 }
 
