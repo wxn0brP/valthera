@@ -95,14 +95,14 @@ if (ifFlag("mc")) {
     process.exit(0);
 }
 
-if (ifFlag("c")) {
-    scriptArgs.shift();
-    config.cmd = scriptArgs.join(" ");
-}
-
 // Load `valthera.json` if exists
 if (fs.existsSync(configPath)) {
     config = deepMerge(config, JSON.parse(fs.readFileSync(configPath, "utf8")));
+}
+
+if (ifFlag("c")) {
+    scriptArgs.shift();
+    config.cmd = scriptArgs.join(" ");
 }
 
 for(const arg of scriptArgs) {
