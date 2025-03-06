@@ -2,7 +2,7 @@ import { exec, spawn } from "child_process";
 import { config } from "./config";
 import { COLORS, log } from "./logger";
 import Readline from "readline";
-import { proc, startProcess, stopProcess } from "./process";
+import { startProcess, stopProcess } from "./process";
 
 // Handle terminal input events
 const rl = Readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -55,10 +55,10 @@ rl.on("line", (input) => {
     }
 });
 
-function exitEvent() {
+async function exitEvent() {
     log(COLORS.green, "Process interrupted. Exiting...");
     rl.close();
-    stopProcess();
+    await stopProcess();
     process.exit(0);
 }
 

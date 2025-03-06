@@ -5,8 +5,8 @@ import { config, processedCmd } from "./config";
 // Function to start the process
 export let proc: ChildProcess | null = null;
 
-export function startProcess() {
-    if (proc) stopProcess();
+export async function startProcess() {
+    if (proc) await stopProcess();
 
     if (config.restart_cmd) {
         exec(config.restart_cmd, (err, stdout) => {
@@ -39,27 +39,27 @@ export function startProcess() {
     });
 }
 
-export function stopProcess() {
+export async function stopProcess() {
     if (proc && proc.pid) {
         const pid = proc.pid;
         log(COLORS.yellow, `Stopping process ${pid}...`);
 
         try {
-            process.kill(-pid, "SIGTERM");
+            proc.kill("SIGTERM");
 
-            setTimeout(() => {
-                if (isProcessAlive(pid)) {
-                    log(COLORS.red, `Process ${pid} still alive. Killing forcefully.`);
-                    process.kill(-pid, "SIGKILL");
-                }
-            }, 1000);
+            await new Promise((resolve) => setTimeout(resolve, 100));
 
-            setTimeout(() => {
+            if (isProcessAlive(pid)) {
+                log(COLORS.red, `Process ${pid} still alive. Killing forcefully.`);
+                proc.kill("SIGKILL");
+
+                await new Promise((resolve) => setTimeout(resolve, 2000));
+
                 if (isProcessAlive(pid)) {
                     log(COLORS.red, `Process ${pid} REFUSES TO DIE. Nuclear option engaged.`);
                     killHard(pid);
                 }
-            }, 2000);
+            }
         } catch (err) {
             log(COLORS.red, `Failed to kill process ${pid}:`, err);
         }
@@ -82,7 +82,7 @@ function killHard(pid: number) {
         if (process.platform === "win32") {
             execSync(`taskkill /F /PID ${pid} /T`);
         } else {
-            execSync(`kill -9 -${pid}`);
+            execSync(`kill -9 ${pid}`);
         }
         log(COLORS.green, `Process ${pid} terminated with extreme prejudice.`);
     } catch (err) {
@@ -92,8 +92,8 @@ function killHard(pid: number) {
 
 
 process.on("exit", () => stopProcess());
-function exitEvent() {
-    stopProcess();
+async function exitEvent() {
+    await stopProcess();
     process.exit();
 }
 process.on("SIGINT", exitEvent);
