@@ -8,5 +8,5 @@ export const COLORS = {
 
 // Function to print colored logs
 export function log(color: string, message: string, after?: string) {
-    return console.log(`${color}[Valthera] ${message}${COLORS.reset}${after ?? ""}`);
+    return console.log(`${color}[Suglite] ${message}${COLORS.reset}${after ?? ""}`);
 }

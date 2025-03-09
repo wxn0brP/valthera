@@ -3,14 +3,14 @@ import { deepMerge } from "./utils";
 import fs from "fs";
 
 // Paths to configuration files
-const configPath = "valthera.json";
+const configPath = "suglite.json";
 const packagePath = "package.json";
 
-// Determine if executed with `node valthera.js` or as `./valthera`
+// Determine if executed with `node suglite.js` or as `./suglite`
 const isDirectExec = process.argv[0].includes("node");
 
 // Configuration interface
-interface ValtheraConfig {
+interface SugliteConfig {
     cmd?: string;
     args?: string[];
     watch?: string[];
@@ -20,7 +20,7 @@ interface ValtheraConfig {
 }
 
 // Default configuration
-export let config: ValtheraConfig = {
+export let config: SugliteConfig = {
     cmd: "",
     args: [],
     watch: [],
@@ -44,7 +44,7 @@ function ifFlag(flag: string) {
 }
 
 if (ifFlag("h") || (scriptArgs.length >= 1 && scriptArgs[0] === "--help")) {
-    log(COLORS.green, "Usage: valthera [options] [command] [args...]");
+    log(COLORS.green, "Usage: suglite [options] [command] [args...]");
     log(COLORS.yellow, "Options:");
     log(COLORS.yellow, "", "  -h            \t Show this help message");
     log(COLORS.yellow, "", "  -v            \t Show version number");
@@ -57,7 +57,7 @@ if (ifFlag("h") || (scriptArgs.length >= 1 && scriptArgs[0] === "--help")) {
 
 if (ifFlag("v")) {
     const pkg = JSON.parse(fs.readFileSync(import.meta.dirname + "/../package.json", "utf8"));
-    log(COLORS.green, `Valthera version: ${pkg.version}`);
+    log(COLORS.green, `suglite version: ${pkg.version}`);
     process.exit(0);
 }
 
@@ -95,7 +95,7 @@ if (ifFlag("mc")) {
     process.exit(0);
 }
 
-// Load `valthera.json` if exists
+// Load `suglite.json` if exists
 if (fs.existsSync(configPath)) {
     config = deepMerge(config, JSON.parse(fs.readFileSync(configPath, "utf8")));
 }

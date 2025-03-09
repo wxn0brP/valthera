@@ -1,44 +1,44 @@
-# Valthera  
+# Suglite  
 
-**Valthera** is a simple tool for watching file changes and automatically restarting processes.  
+**Suglite** is a simple tool for watching file changes and automatically restarting processes.  
 
 ## Installation  
 
 Run the following command:  
 
 ```sh
-yarn global add github:wxn0brP/valthera#dist
+yarn global add github:wxn0brP/suglite#dist
 ```
 
-This downloads the `valthera` script and makes it executable.  
+This downloads the `suglite` script and makes it executable.  
 
 ## Usage  
 
 Run with the default command:  
 ```sh
-valthera
+suglite
 ```
 
 Run with a custom command:  
 ```sh
-valthera -c "node server.js"
+suglite -c "node server.js"
 ```
 
 Use a predefined configuration:  
 ```sh
-valthera -p ts
+suglite -p ts
 ```
 
 Set a configuration value:  
 ```sh
-valthera --cmd="node server.js" --watch="src"
+suglite --cmd="node server.js" --watch="src"
 ```
 
-See `valthera --help` for more options.
+See `suglite --help` for more options.
 
 ## Configuration  
 
-Create a `valthera.json` file in your project directory eg:  
+Create a `suglite.json` file in your project directory eg:  
 ```json
 {
   "cmd": "npm start",
@@ -52,12 +52,12 @@ Create a `valthera.json` file in your project directory eg:
 ```
 or run
 ```sh
-valthera -mc
+suglite -mc
 ```
 
 ## Interactive Commands  
 
-While `valthera` is running, you can type:  
+While `suglite` is running, you can type:  
 | Command | Description |
 | --- | --- |
 | `rs` | manual restart |

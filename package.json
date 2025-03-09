@@ -1,12 +1,12 @@
 {
-	"name": "valthera",
+	"name": "suglite",
 	"version": "0.0.9",
 	"main": "dist/index.js",
 	"author": "wxn0brP",
 	"license": "MIT",
 	"type": "module",
 	"bin": {
-		"valthera": "./dist/index.js"
+		"suglite": "./dist/index.js"
 	},
 	"scripts": {
 		"build": "tsc && tsc-alias",
