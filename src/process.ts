@@ -2,10 +2,20 @@ import { exec, spawn, ChildProcess, execSync } from "child_process";
 import { COLORS, log } from "./logger";
 import { config, processedCmd } from "./config";
 
-// Function to start the process
 export let proc: ChildProcess | null = null;
+let restartTimeout: NodeJS.Timeout | null = null;
 
-export async function startProcess() {
+// Debounce restart
+export function startProcess() {
+    if (restartTimeout) clearTimeout(restartTimeout);
+
+    restartTimeout = setTimeout(async () => {
+        await restartProcess();
+    }, 100);
+}
+
+// Function to start/restart the process
+async function restartProcess() {
     if (proc) await stopProcess();
 
     if (config.restart_cmd) {
